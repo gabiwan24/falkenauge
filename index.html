@@ -165,7 +165,8 @@
     <!-- ================= DESKTOP SCREEN ================= -->
     <div id="desktop-screen" class="hidden absolute inset-0 w-full h-full p-4 overflow-hidden">
         <div class="grid grid-cols-1 gap-4 w-32 content-start h-full z-10 relative">
-            <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group" onclick="openApp('text-editor')">
+            <!-- Datenbank-Icon jetzt ohne Click-Event für den Editor -->
+            <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group">
                 <svg class="w-12 h-12 text-blue-400 mb-1 opacity-80 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                 <span class="text-xs text-gray-300 drop-shadow-md">Datenbank</span>
             </div>
@@ -252,7 +253,6 @@
 
     <!-- ================= TASKBAR ================= -->
     <div id="taskbar" class="hidden fixed bottom-0 left-0 right-0 h-10 flex justify-end items-center px-4 z-50">
-        <!-- Button entfernt, nur Uhrzeit auf der rechten Seite -->
         <div id="clock-display" class="text-sm font-mono font-bold text-gray-800 bg-white bg-opacity-30 px-3 py-1 rounded border border-gray-400 shadow-sm">00:00:00</div>
     </div>
 
