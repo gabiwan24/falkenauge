@@ -168,52 +168,65 @@
 
         <!-- ================= TELEFON APP ================= -->
         <div id="messenger-app" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[340px] max-w-[95vw] h-auto max-h-[90vh] bg-gray-800 border border-gray-600 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-30 ring-8 ring-gray-900">
-            <div class="bg-gray-900 px-6 pt-6 pb-4 text-center border-b border-gray-700">
-                <div class="w-14 h-14 bg-blue-600 rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+            <!-- Title Bar -->
+            <div class="bg-gray-700 px-4 py-2 flex justify-between items-center border-b border-gray-600 flex-shrink-0">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    <span class="text-sm font-semibold text-gray-200">Telefon-Modul</span>
                 </div>
-                <h3 class="font-bold text-gray-200">Telefon</h3>
-                <p class="text-[10px] text-green-500 animate-pulse tracking-widest uppercase">Bereit</p>
-            </div>
-
-            <div class="p-4 flex flex-col items-center justify-start space-y-4">
-                <div id="phone-display" class="w-full text-center h-[72px] bg-black rounded-lg border border-gray-700 flex items-center justify-center text-3xl tracking-widest text-blue-400 font-bold shadow-inner">
-                    &nbsp;
-                </div>
-
-                <div id="call-status" class="text-xs text-gray-400 text-center h-4 uppercase tracking-tighter">
-                    Nummer wählen...
-                </div>
-
-                <div class="grid grid-cols-3 gap-3 w-full px-2 pb-2">
-                    <script>
-                        const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-                        numbers.forEach(num => {
-                            document.write(`<button onclick="addNumber('${num}')" class="numpad-btn w-16 h-16 rounded-full bg-gray-700 hover:bg-gray-600 text-2xl font-bold flex items-center justify-center transition-all shadow-md">${num}</button>`);
-                        });
-                    </script>
-                    <button onclick="clearNumber()" class="numpad-btn w-16 h-16 rounded-full bg-gray-900 text-red-400 text-[10px] font-bold flex items-center justify-center uppercase border border-red-900/30">Löschen</button>
-                    <button onclick="addNumber('0')" class="numpad-btn w-16 h-16 rounded-full bg-gray-700 hover:bg-gray-600 text-2xl font-bold flex items-center justify-center shadow-md">0</button>
-                    <button onclick="startCall()" class="numpad-btn w-16 h-16 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-lg">
-                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                    </button>
-                </div>
-
-                <button id="hangup-btn" onclick="stopCall()" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-3 transition-colors shadow-lg group">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" transform="rotate(135 12 12)"></path>
-                    </svg>
-                    <span>AUFLEGEN</span>
+                <button onclick="closeApp('messenger-app')" class="text-gray-400 hover:text-white hover:bg-red-500 p-1 rounded transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <div class="px-6 py-4 text-center border-t border-gray-700 bg-gray-900/50">
-                <button onclick="stopCall(); closeApp('messenger-app');" class="text-gray-500 hover:text-gray-200 text-[10px] uppercase tracking-widest font-bold transition-colors">Schließen</button>
+            <!-- Content Container -->
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <div class="bg-gray-900 px-6 pt-4 pb-3 text-center border-b border-gray-700 flex-shrink-0">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full mx-auto mb-1 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-200 uppercase tracking-widest text-[10px]">Terminal Voice</h3>
+                    <p class="text-[9px] text-green-500 animate-pulse tracking-widest uppercase">Bereit</p>
+                </div>
+
+                <div class="p-3 flex flex-col items-center justify-start space-y-3 overflow-y-auto">
+                    <!-- Display -->
+                    <div id="phone-display" class="w-full text-center h-[60px] bg-black rounded-lg border border-gray-700 flex items-center justify-center text-2xl tracking-widest text-blue-400 font-bold shadow-inner flex-shrink-0">
+                        &nbsp;
+                    </div>
+
+                    <div id="call-status" class="text-[10px] text-gray-400 text-center h-4 uppercase tracking-tighter">
+                        Nummer wählen...
+                    </div>
+
+                    <!-- Numpad -->
+                    <div class="grid grid-cols-3 gap-2 w-full px-4 pb-1">
+                        <script>
+                            const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                            numbers.forEach(num => {
+                                document.write(`<button onclick="addNumber('${num}')" class="numpad-btn w-14 h-14 rounded-full bg-gray-700 hover:bg-gray-600 text-xl font-bold flex items-center justify-center transition-all shadow-md border border-gray-600 flex-shrink-0">${num}</button>`);
+                            });
+                        </script>
+                        <button onclick="clearNumber()" class="numpad-btn w-14 h-14 rounded-full bg-gray-900 text-red-400 text-[9px] font-bold flex items-center justify-center uppercase border border-red-900/30 shadow-md flex-shrink-0 leading-tight px-1 text-center">Löschen</button>
+                        <button onclick="addNumber('0')" class="numpad-btn w-14 h-14 rounded-full bg-gray-700 hover:bg-gray-600 text-xl font-bold flex items-center justify-center shadow-md border border-gray-600 flex-shrink-0">0</button>
+                        <button onclick="startCall()" class="numpad-btn w-14 h-14 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-lg border border-green-500 flex-shrink-0">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Hangup Button - Sicher im Container -->
+                    <button id="hangup-btn" onclick="stopCall()" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-3 transition-colors shadow-lg group flex-shrink-0 mb-2">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" transform="rotate(135 12 12)"></path>
+                        </svg>
+                        <span class="text-xs">AUFLEGEN</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Audio für Erfolgsschleife - Hier den Dateinamen anpassen -->
+    <!-- Audio für Erfolgsschleife -->
     <audio id="success-loop" loop>
         <source src="audio_datei.mp3" type="audio/mpeg">
     </audio>
@@ -296,6 +309,7 @@
         let dialedNumber = "";
         let audioCtx = null;
         let isCalling = false;
+        let playPromise = null;
         const display = document.getElementById('phone-display');
         const status = document.getElementById('call-status');
         const loopAudio = document.getElementById('success-loop');
@@ -330,7 +344,17 @@
                     if(!isCalling) return;
                     status.innerText = "Verbunden";
                     status.classList.remove('animate-calling');
-                    loopAudio.play();
+                    
+                    if (audioCtx && audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    
+                    playPromise = loopAudio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Audio-Wiedergabe fehlgeschlagen:", error);
+                        });
+                    }
                 });
             } else {
                 simulateRinging(2, () => {
@@ -351,12 +375,26 @@
             status.innerText = "Nummer wählen...";
             status.classList.remove('animate-calling');
             hangupBtn.classList.add('hidden');
-            loopAudio.pause();
-            loopAudio.currentTime = 0;
+            
+            if (playPromise !== null) {
+                playPromise.then(() => {
+                    loopAudio.pause();
+                    loopAudio.currentTime = 0;
+                }).catch(() => {
+                    loopAudio.pause();
+                    loopAudio.currentTime = 0;
+                });
+                playPromise = null;
+            } else {
+                loopAudio.pause();
+                loopAudio.currentTime = 0;
+            }
         }
 
         function playTone(freq, duration, type = "sine") {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = type;
@@ -380,6 +418,7 @@
             if (!pair) return;
             
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             
             const startOsc = (f) => {
                 const osc = audioCtx.createOscillator();
@@ -403,9 +442,15 @@
             const ring = () => {
                 if (!isCalling) return;
                 if (count < times) {
-                    playTone(425, 0.8, "sine");
+                    // 2000s Style "Beep-Beep" - Verlängerte Töne (0.4s)
+                    playTone(600, 0.4, "square");
+                    setTimeout(() => {
+                        if (!isCalling) return;
+                        playTone(600, 0.4, "square");
+                    }, 500); // Längeres Intervall zwischen den Beeps passend zur Länge
+                    
                     count++;
-                    ringTimeout = setTimeout(ring, 2500);
+                    ringTimeout = setTimeout(ring, 3000);
                 } else {
                     callback();
                 }
