@@ -6,9 +6,8 @@
     <title>Detektei System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom Styles für das Betriebssystem-Feeling */
         body {
-            user-select: none; /* Verhindert das Markieren von Text */
+            user-select: none;
             overflow: hidden;
         }
 
@@ -16,7 +15,6 @@
             background: radial-gradient(circle at center, #1f2937 0%, #030712 100%);
         }
 
-        /* Animation für falsches Passwort */
         @keyframes flashRed {
             0% { background-color: transparent; }
             50% { background-color: rgba(220, 38, 38, 0.4); }
@@ -27,7 +25,6 @@
             animation: flashRed 0.4s ease-in-out;
         }
 
-        /* Schüttel-Animation für falsches Passwort (Kindgerechtes Feedback) */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-10px); }
@@ -37,7 +34,6 @@
             animation: shake 0.5s ease-in-out;
         }
 
-        /* Pulsierender Glow-Effekt für das wichtige Icon */
         @keyframes pulseGlow {
             0%, 100% { filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.4)); transform: scale(1); }
             50% { filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.9)); transform: scale(1.05); }
@@ -46,36 +42,44 @@
             animation: pulseGlow 2.5s infinite ease-in-out;
         }
 
-        /* Desktop Icon Hover-Effekt */
         .desktop-icon:hover {
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 0.5rem;
             cursor: pointer;
         }
 
-        /* Custom Scrollbar für das Textfeld */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1f2937; }
         ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
-        /* Desktop Hintergrundbild */
         #desktop-screen {
             background-image: url('desktop.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-color: #1f2937; /* Fallback-Farbe, falls das Bild nicht lädt */
+            background-color: #1f2937;
+        }
+
+        .numpad-btn:active {
+            transform: scale(0.9);
+            background-color: #374151;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .animate-calling {
+            animation: blink 1s infinite;
         }
     </style>
 </head>
 <body class="h-screen w-screen bg-gray-900 text-white font-mono flex items-center justify-center relative os-bg">
 
-    <!-- Roter Flash-Overlay bei falschem Passwort -->
     <div id="error-flash" class="absolute inset-0 pointer-events-none z-50"></div>
 
-    <!-- Zwangsoverlay, falls Vollbild abgebrochen wird -->
-    <div id="lock-overlay" class="hidden absolute inset-0 bg-black z-[100] flex flex-col items-center justify-center">
+    <div id="lock-overlay" class="hidden absolute inset-0 bg-black z-[100] flex flex-col items-center justify-center text-center px-4">
         <svg class="w-16 h-16 text-red-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
         <h1 class="text-3xl font-bold text-red-600 tracking-widest mb-2">SYSTEM HALT</h1>
         <p class="text-gray-400">Vollbildmodus erforderlich. Bitte drücke die Taste <kbd class="bg-gray-800 px-2 py-1 rounded text-white font-bold">0</kbd> um fortzufahren.</p>
@@ -92,56 +96,21 @@
         <div id="login-form" class="space-y-6">
             <div class="text-center">
                 <div class="flex justify-center space-x-2 sm:space-x-4">
-                    <!-- Ziffer 1 -->
-                    <div class="flex flex-col items-center">
-                        <button type="button" onclick="incrementDigit(0)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-                        </button>
-                        <div class="digit-display w-12 h-16 sm:w-14 sm:h-18 flex items-center justify-center text-3xl font-bold bg-gray-900 border-2 border-gray-600 rounded-md text-white shadow-inner select-none">0</div>
-                        <button type="button" onclick="decrementDigit(0)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                    </div>
-                    <!-- Ziffer 2 -->
-                    <div class="flex flex-col items-center">
-                        <button type="button" onclick="incrementDigit(1)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-                        </button>
-                        <div class="digit-display w-12 h-16 sm:w-14 sm:h-18 flex items-center justify-center text-3xl font-bold bg-gray-900 border-2 border-gray-600 rounded-md text-white shadow-inner select-none">0</div>
-                        <button type="button" onclick="decrementDigit(1)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                    </div>
-                    <!-- Ziffer 3 -->
-                    <div class="flex flex-col items-center">
-                        <button type="button" onclick="incrementDigit(2)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-                        </button>
-                        <div class="digit-display w-12 h-16 sm:w-14 sm:h-18 flex items-center justify-center text-3xl font-bold bg-gray-900 border-2 border-gray-600 rounded-md text-white shadow-inner select-none">0</div>
-                        <button type="button" onclick="decrementDigit(2)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                    </div>
-                    <!-- Ziffer 4 -->
-                    <div class="flex flex-col items-center">
-                        <button type="button" onclick="incrementDigit(3)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-                        </button>
-                        <div class="digit-display w-12 h-16 sm:w-14 sm:h-18 flex items-center justify-center text-3xl font-bold bg-gray-900 border-2 border-gray-600 rounded-md text-white shadow-inner select-none">0</div>
-                        <button type="button" onclick="decrementDigit(3)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                    </div>
-                    <!-- Ziffer 5 -->
-                    <div class="flex flex-col items-center">
-                        <button type="button" onclick="incrementDigit(4)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-                        </button>
-                        <div class="digit-display w-12 h-16 sm:w-14 sm:h-18 flex items-center justify-center text-3xl font-bold bg-gray-900 border-2 border-gray-600 rounded-md text-white shadow-inner select-none">0</div>
-                        <button type="button" onclick="decrementDigit(4)" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                    </div>
+                    <script>
+                        for(let i=0; i<5; i++) {
+                            document.write(`
+                                <div class="flex flex-col items-center">
+                                    <button type="button" onclick="incrementDigit(${i})" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                    </button>
+                                    <div class="digit-display w-12 h-16 sm:w-14 sm:h-18 flex items-center justify-center text-3xl font-bold bg-gray-900 border-2 border-gray-600 rounded-md text-white shadow-inner select-none">0</div>
+                                    <button type="button" onclick="decrementDigit(${i})" class="text-gray-500 hover:text-white p-1 focus:outline-none active:scale-90 transition-transform">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                </div>
+                            `);
+                        }
+                    </script>
                 </div>
             </div>
             <button onclick="checkPassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-200 uppercase tracking-wider shadow-lg active:scale-95">
@@ -151,24 +120,25 @@
     </div>
 
     <!-- ================= DESKTOP SCREEN ================= -->
-    <div id="desktop-screen" class="hidden absolute inset-0 w-full h-full p-4">
-        <!-- Desktop Icons (Grid) -->
+    <div id="desktop-screen" class="hidden absolute inset-0 w-full h-full p-4 overflow-hidden">
+        
         <div class="grid grid-cols-1 gap-4 w-32 content-start h-full z-10 relative">
-            
-            <!-- Deko Icon 1 -->
             <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group">
                 <svg class="w-12 h-12 text-blue-400 mb-1 opacity-80 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                 <span class="text-xs text-gray-300 drop-shadow-md">Datenbank</span>
             </div>
 
-            <!-- Deko Icon 2 -->
+            <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group" onclick="openApp('messenger-app')">
+                <svg class="w-12 h-12 text-green-400 mb-1 opacity-80 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                <span class="text-xs text-gray-300 drop-shadow-md font-bold">Telefon</span>
+            </div>
+
             <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group">
                 <svg class="w-12 h-12 text-gray-500 mb-1 opacity-80 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 <span class="text-xs text-gray-300 drop-shadow-md">Papierkorb</span>
             </div>
         </div>
 
-        <!-- Zentriertes, auffälliges Icon (Textdatei) -->
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
             <div class="desktop-icon icon-highlight flex flex-col items-center justify-center p-4 text-center group pointer-events-auto" onclick="openApp('text-editor')">
                 <svg class="w-20 h-20 text-blue-100 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -176,71 +146,100 @@
             </div>
         </div>
 
-        <!-- Fiktives Textprogramm (Fenster) -->
+        <!-- ================= TEXT EDITOR ================= -->
         <div id="text-editor" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] max-w-[90vw] h-[400px] max-h-[90vh] bg-gray-800 border border-gray-600 rounded-lg shadow-2xl flex flex-col overflow-hidden z-20">
-            <!-- Title Bar -->
-            <div class="bg-gray-700 px-4 py-2 flex justify-between items-center cursor-default border-b border-gray-600">
+            <div class="bg-gray-700 px-4 py-2 flex justify-between items-center border-b border-gray-600">
                 <div class="flex items-center space-x-2">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span class="text-sm font-semibold text-gray-200">Editor - Fallakte_304.txt</span>
                 </div>
-                <!-- Close Button -->
                 <button onclick="closeApp('text-editor')" class="text-gray-400 hover:text-white hover:bg-red-500 p-1 rounded transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <!-- Content Area (Read-Only) -->
             <div class="flex-1 p-6 overflow-y-auto bg-gray-900 text-green-400 font-mono text-sm leading-relaxed">
-                <p class="mb-4">Sala ist doof! ;)</p>
-                <p class="mb-4">...</p>
-                <p class="mb-4">...</p>
-                <p class="mb-8">...</p>
-                
-                <div class="bg-gray-800 p-4 border-l-4 border-green-500 mb-8 italic">
-                    "..."
+                <p class="mb-4 text-gray-500">Log: 14. Oktober - Verschlüsselt</p>
+                <div class="bg-gray-800 p-4 border-l-4 border-green-500 mb-8 italic text-white">
+                    "Die Lösung liegt in den Himmelsrichtungen verborgen. Fang dort an, wo die Sonne aufgeht, und folge dem Lauf der Zeit."
                 </div>
-                
-                <p class="text-gray-500 mt-8">--- ENDE DER DATEI ---</p>
+                <p>--- ENDE DER DATEI ---</p>
+            </div>
+        </div>
+
+        <!-- ================= TELEFON APP ================= -->
+        <div id="messenger-app" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[340px] max-w-[95vw] h-auto max-h-[90vh] bg-gray-800 border border-gray-600 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-30 ring-8 ring-gray-900">
+            <div class="bg-gray-900 px-6 pt-6 pb-4 text-center border-b border-gray-700">
+                <div class="w-14 h-14 bg-blue-600 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                </div>
+                <h3 class="font-bold text-gray-200">Telefon</h3>
+                <p class="text-[10px] text-green-500 animate-pulse tracking-widest uppercase">Bereit</p>
+            </div>
+
+            <div class="p-4 flex flex-col items-center justify-start space-y-4">
+                <div id="phone-display" class="w-full text-center h-[72px] bg-black rounded-lg border border-gray-700 flex items-center justify-center text-3xl tracking-widest text-blue-400 font-bold shadow-inner">
+                    &nbsp;
+                </div>
+
+                <div id="call-status" class="text-xs text-gray-400 text-center h-4 uppercase tracking-tighter">
+                    Nummer wählen...
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 w-full px-2 pb-2">
+                    <script>
+                        const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                        numbers.forEach(num => {
+                            document.write(`<button onclick="addNumber('${num}')" class="numpad-btn w-16 h-16 rounded-full bg-gray-700 hover:bg-gray-600 text-2xl font-bold flex items-center justify-center transition-all shadow-md">${num}</button>`);
+                        });
+                    </script>
+                    <button onclick="clearNumber()" class="numpad-btn w-16 h-16 rounded-full bg-gray-900 text-red-400 text-[10px] font-bold flex items-center justify-center uppercase border border-red-900/30">Löschen</button>
+                    <button onclick="addNumber('0')" class="numpad-btn w-16 h-16 rounded-full bg-gray-700 hover:bg-gray-600 text-2xl font-bold flex items-center justify-center shadow-md">0</button>
+                    <button onclick="startCall()" class="numpad-btn w-16 h-16 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-lg">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                    </button>
+                </div>
+
+                <button id="hangup-btn" onclick="stopCall()" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-3 transition-colors shadow-lg group">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" transform="rotate(135 12 12)"></path>
+                    </svg>
+                    <span>AUFLEGEN</span>
+                </button>
+            </div>
+
+            <div class="px-6 py-4 text-center border-t border-gray-700 bg-gray-900/50">
+                <button onclick="stopCall(); closeApp('messenger-app');" class="text-gray-500 hover:text-gray-200 text-[10px] uppercase tracking-widest font-bold transition-colors">Schließen</button>
             </div>
         </div>
     </div>
 
+    <!-- Audio für Erfolgsschleife - Hier den Dateinamen anpassen -->
+    <audio id="success-loop" loop>
+        <source src="audio_datei.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // --- 1. Vollbild & Kiosk-Logik ---
         let isLocked = false;
         const lockOverlay = document.getElementById('lock-overlay');
 
+        // --- Vollbild Logik ---
         document.addEventListener('keydown', (e) => {
-            // Wenn '0' gedrückt wird
             if (e.key === '0') {
-                isLocked = !isLocked; // Status umschalten
-
+                isLocked = !isLocked;
                 if (isLocked) {
-                    // Versuche Vollbild zu aktivieren
                     if (document.documentElement.requestFullscreen) {
-                        document.documentElement.requestFullscreen().catch(err => {
-                            console.log(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
-                        });
+                        document.documentElement.requestFullscreen().catch(() => {});
                     }
                     lockOverlay.classList.add('hidden');
                 } else {
-                    // Vollbild beenden
                     if (document.fullscreenElement) {
                         document.exitFullscreen();
                     }
                     lockOverlay.classList.add('hidden');
                 }
             }
-
-            // Verhindere Standard-Shortcuts, wenn das System "gesperrt" ist
-            if (isLocked) {
-                if (['F11', 'F12'].includes(e.key)) {
-                    e.preventDefault();
-                }
-            }
         });
 
-        // Überwache Änderungen am Vollbild-Status
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement && isLocked) {
                 lockOverlay.classList.remove('hidden');
@@ -249,10 +248,9 @@
             }
         });
 
-        // Verhindere Rechtsklick für mehr Kiosk-Feeling
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        // --- 2. Login Logik ---
+        // --- Login Logik ---
         let currentDigits = [0, 0, 0, 0, 0];
 
         function incrementDigit(index) {
@@ -271,31 +269,148 @@
         }
 
         function checkPassword() {
-            const password = currentDigits.join('');
-
-            if (password === "12345") {
+            if (currentDigits.join('') === "12345") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('desktop-screen').classList.remove('hidden');
             } else {
                 const flash = document.getElementById('error-flash');
                 const loginScreen = document.getElementById('login-screen');
-                
                 flash.classList.remove('flash-error');
                 void flash.offsetWidth;
                 flash.classList.add('flash-error');
-                
                 loginScreen.classList.add('animate-shake');
                 setTimeout(() => loginScreen.classList.remove('animate-shake'), 500);
             }
         }
 
-        // --- 3. Desktop App Logik ---
         function openApp(appId) {
             document.getElementById(appId).classList.remove('hidden');
         }
 
         function closeApp(appId) {
             document.getElementById(appId).classList.add('hidden');
+            if(appId === 'messenger-app') stopCall();
+        }
+
+        // --- Telefon & Audio Logik ---
+        let dialedNumber = "";
+        let audioCtx = null;
+        let isCalling = false;
+        const display = document.getElementById('phone-display');
+        const status = document.getElementById('call-status');
+        const loopAudio = document.getElementById('success-loop');
+        const hangupBtn = document.getElementById('hangup-btn');
+        let ringTimeout = null;
+
+        function addNumber(num) {
+            if (isCalling) return;
+            if (dialedNumber.length < 10) {
+                dialedNumber += num;
+                display.innerText = dialedNumber;
+                playDTMF(num);
+            }
+        }
+
+        function clearNumber() {
+            if (isCalling) return;
+            dialedNumber = "";
+            display.innerHTML = "&nbsp;";
+            status.innerText = "Nummer wählen...";
+        }
+
+        function startCall() {
+            if (dialedNumber === "" || isCalling) return;
+            isCalling = true;
+            status.innerText = "Verbinde...";
+            status.classList.add('animate-calling');
+            hangupBtn.classList.remove('hidden');
+
+            if (dialedNumber === "1234567") {
+                simulateRinging(3, () => {
+                    if(!isCalling) return;
+                    status.innerText = "Verbunden";
+                    status.classList.remove('animate-calling');
+                    loopAudio.play();
+                });
+            } else {
+                simulateRinging(2, () => {
+                    if(!isCalling) return;
+                    status.innerText = "Kein Anschluss";
+                    status.classList.remove('animate-calling');
+                    playTone(300, 0.8, "sawtooth");
+                    setTimeout(stopCall, 2000);
+                });
+            }
+        }
+
+        function stopCall() {
+            isCalling = false;
+            if(ringTimeout) clearTimeout(ringTimeout);
+            dialedNumber = "";
+            display.innerHTML = "&nbsp;";
+            status.innerText = "Nummer wählen...";
+            status.classList.remove('animate-calling');
+            hangupBtn.classList.add('hidden');
+            loopAudio.pause();
+            loopAudio.currentTime = 0;
+        }
+
+        function playTone(freq, duration, type = "sine") {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playDTMF(num) {
+            const frequencies = {
+                '1': [697, 1209], '2': [697, 1336], '3': [697, 1477],
+                '4': [770, 1209], '5': [770, 1336], '6': [770, 1477],
+                '7': [852, 1209], '8': [852, 1336], '9': [852, 1477],
+                '0': [941, 1336]
+            };
+            const pair = frequencies[num];
+            if (!pair) return;
+            
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            const startOsc = (f) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            };
+            
+            startOsc(pair[0]);
+            startOsc(pair[1]);
+        }
+
+        function simulateRinging(times, callback) {
+            let count = 0;
+            const ring = () => {
+                if (!isCalling) return;
+                if (count < times) {
+                    playTone(425, 0.8, "sine");
+                    count++;
+                    ringTimeout = setTimeout(ring, 2500);
+                } else {
+                    callback();
+                }
+            };
+            ring();
         }
     </script>
 </body>
