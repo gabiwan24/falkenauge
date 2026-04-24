@@ -82,6 +82,13 @@
             position: absolute;
             z-index: 20;
         }
+
+        /* Taskbar Styling (Windows-Grau) */
+        #taskbar {
+            background-color: #d4d0c8; /* Klassisches Windows Grau */
+            border-top: 2px solid #ffffff;
+            box-shadow: inset 0 1px 0 #dfdfdf;
+        }
     </style>
 </head>
 <body class="h-screen w-screen bg-gray-900 text-white font-mono flex items-center justify-center relative os-bg">
@@ -97,13 +104,13 @@
         CONFIG.passwordLength = CONFIG.password.length;
 
         const DIGIT_COLORS = [
-            "text-red-600",      // Zahl 1: Rot
-            "text-yellow-500",   // Zahl 2: Gelb
-            "text-green-600",    // Zahl 3: Grün
-            "text-cyan-500",     // Zahl 4: Türkis
-            "text-violet-600",   // Zahl 5: Violett
-            "text-pink-500",     // Zahl 6: Pink
-            "text-white"         // Zahl 7: Weiß
+            "text-red-600",      // Zahl 1
+            "text-yellow-500",   // Zahl 2
+            "text-green-600",    // Zahl 3
+            "text-cyan-500",     // Zahl 4
+            "text-violet-600",   // Zahl 5
+            "text-pink-500",     // Zahl 6
+            "text-white"         // Zahl 7
         ];
 
         const TONE_CONFIG = {
@@ -158,7 +165,7 @@
     <!-- ================= DESKTOP SCREEN ================= -->
     <div id="desktop-screen" class="hidden absolute inset-0 w-full h-full p-4 overflow-hidden">
         <div class="grid grid-cols-1 gap-4 w-32 content-start h-full z-10 relative">
-            <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group">
+            <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group" onclick="openApp('text-editor')">
                 <svg class="w-12 h-12 text-blue-400 mb-1 opacity-80 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                 <span class="text-xs text-gray-300 drop-shadow-md">Datenbank</span>
             </div>
@@ -243,6 +250,12 @@
         </div>
     </div>
 
+    <!-- ================= TASKBAR ================= -->
+    <div id="taskbar" class="hidden fixed bottom-0 left-0 right-0 h-10 flex justify-end items-center px-4 z-50">
+        <!-- Button entfernt, nur Uhrzeit auf der rechten Seite -->
+        <div id="clock-display" class="text-sm font-mono font-bold text-gray-800 bg-white bg-opacity-30 px-3 py-1 rounded border border-gray-400 shadow-sm">00:00:00</div>
+    </div>
+
     <audio id="success-loop" loop><source id="audio-source" type="audio/mpeg"></audio>
 
     <script>
@@ -277,6 +290,8 @@
         // --- Initialisierung ---
         const digitContainer = document.getElementById('digit-container');
         let currentDigits = Array(CONFIG.passwordLength).fill(0);
+        let passwordInputPointer = 0; 
+        
         document.getElementById('audio-source').src = CONFIG.audioFile;
         document.getElementById('trash-image-display').src = CONFIG.trashImage;
         document.getElementById('success-loop').load();
@@ -290,24 +305,55 @@
         }
         document.querySelectorAll('.app-window').forEach(makeDraggable);
 
-        // Vollbild Logik
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('clock-display').innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
         let isLocked = false;
         const lockOverlay = document.getElementById('lock-overlay');
+        
         document.addEventListener('keydown', (e) => {
-            if (e.key === '0') {
+            const loginVisible = !document.getElementById('login-screen').classList.contains('hidden');
+            const phoneVisible = !document.getElementById('messenger-app').classList.contains('hidden');
+
+            if (e.key === '0' && loginVisible === false && phoneVisible === false) {
                 isLocked = !isLocked;
                 if (isLocked) { document.documentElement.requestFullscreen().catch(() => {}); lockOverlay.classList.add('hidden'); }
                 else { if (document.fullscreenElement) document.exitFullscreen(); lockOverlay.classList.add('hidden'); }
             }
+
+            if (e.key >= '0' && e.key <= '9') {
+                if (loginVisible) {
+                    currentDigits[passwordInputPointer] = parseInt(e.key);
+                    updateDigitDisplay(passwordInputPointer);
+                    passwordInputPointer = (passwordInputPointer + 1) % CONFIG.passwordLength;
+                } else if (phoneVisible) {
+                    addNumber(e.key);
+                }
+            } else if (e.key === 'Enter') {
+                if (loginVisible) checkPassword();
+                else if (phoneVisible) {
+                    if (isCalling || isPlayingSignal) stopCall();
+                    else startCall();
+                }
+            } else if (e.key === 'Backspace' && phoneVisible) {
+                dialedNumber = dialedNumber.slice(0, -1);
+                document.getElementById('phone-display').innerText = dialedNumber || " ";
+            }
         });
+
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement && isLocked) lockOverlay.classList.remove('hidden');
             else if (document.fullscreenElement) lockOverlay.classList.add('hidden');
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        function incrementDigit(index) { currentDigits[index] = (currentDigits[index] + 1) % 10; updateDigitDisplay(index); }
-        function decrementDigit(index) { currentDigits[index] = (currentDigits[index] - 1 + 10) % 10; updateDigitDisplay(index); }
+        function incrementDigit(index) { currentDigits[index] = (currentDigits[index] + 1) % 10; updateDigitDisplay(index); passwordInputPointer = index; }
+        function decrementDigit(index) { currentDigits[index] = (currentDigits[index] - 1 + 10) % 10; updateDigitDisplay(index); passwordInputPointer = index; }
         function updateDigitDisplay(index) { document.querySelectorAll('.digit-display')[index].innerText = currentDigits[index]; }
 
         function checkPassword() {
@@ -319,7 +365,11 @@
                 vScreen.classList.remove('hidden'); vProc.classList.remove('hidden'); vSucc.classList.add('hidden');
                 setTimeout(() => {
                     vProc.classList.add('hidden'); vSucc.classList.remove('hidden');
-                    setTimeout(() => { vScreen.classList.add('hidden'); document.getElementById('desktop-screen').classList.remove('hidden'); }, 3000);
+                    setTimeout(() => { 
+                        vScreen.classList.add('hidden'); 
+                        document.getElementById('desktop-screen').classList.remove('hidden'); 
+                        document.getElementById('taskbar').classList.remove('hidden');
+                    }, 3000);
                 }, 5000);
             } else {
                 const flash = document.getElementById('error-flash'); const lScreen = document.getElementById('login-screen');
@@ -338,10 +388,10 @@
         // --- Telefon & Audio Logik ---
         let dialedNumber = "";
         let audioCtx = null;
-        let oscillator = null;
         let gainNode = null;
         let filterNode = null;
         let isPlayingSignal = false;
+        let isCalling = false;
         let signalTimer = null;
         let playPromise = null;
         let cycleCount = 0;
@@ -371,7 +421,7 @@
             const freqs = DTMF_FREQS[key];
             if (!freqs) return;
             const now = audioCtx.currentTime;
-            const duration = 0.3; // 300ms
+            const duration = 0.3; 
             const g = audioCtx.createGain();
             g.gain.setValueAtTime(0, now);
             g.gain.linearRampToValueAtTime(0.15, now + 0.01);
@@ -392,8 +442,6 @@
             if (!isPlayingSignal) return;
             const c = TONE_CONFIG[mode];
             const now = audioCtx.currentTime;
-            
-            // Audio Erzeugung (425Hz)
             const osc = audioCtx.createOscillator();
             osc.type = 'sine';
             osc.frequency.setValueAtTime(425, now);
@@ -407,7 +455,6 @@
             osc.start(now);
             osc.stop(now + (c.tone / 1000));
 
-            // UI Update
             statusLight.className = `w-12 h-12 rounded-full mx-auto mb-1 flex items-center justify-center transition-all duration-150 shadow-[0_0_20px_${c.shadow}] ${c.color} opacity-100`;
             setTimeout(() => { if(isPlayingSignal) statusLight.classList.replace('opacity-100', 'opacity-30'); }, c.tone);
 
@@ -415,7 +462,10 @@
             if (mode === 'busy' && cycleCount >= 4) { setTimeout(stopCall, c.tone + c.pause); return; }
             if (mode === 'free' && cycleCount >= 3) {
                 setTimeout(() => {
-                    isPlayingSignal = false; status.innerText = "Verbunden";
+                    if (!isPlayingSignal) return;
+                    isPlayingSignal = false; 
+                    isCalling = true;
+                    status.innerText = "Verbunden";
                     statusLight.className = `w-12 h-12 bg-blue-600 rounded-full mx-auto mb-1 flex items-center justify-center opacity-100 shadow-[0_0_20px_rgba(59,130,246,0.8)]`;
                     playPromise = loopAudio.play();
                 }, c.tone + 500);
@@ -435,14 +485,18 @@
             if (dialedNumber === "" || isPlayingSignal) return;
             initAudio();
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            isPlayingSignal = true; cycleCount = 0; status.innerText = "Verbinde..."; hangupBtn.classList.remove('hidden');
+            isPlayingSignal = true; 
+            isCalling = false; 
+            cycleCount = 0; status.innerText = "Verbinde..."; hangupBtn.classList.remove('hidden');
             const mode = (dialedNumber === CONFIG.phoneNumber) ? 'free' : 'busy';
             if (mode === 'busy') status.innerText = "Besetzt...";
             playSignalCycle(mode);
         }
 
         function stopCall() {
-            isPlayingSignal = false; clearTimeout(signalTimer);
+            isPlayingSignal = false; 
+            isCalling = false;
+            clearTimeout(signalTimer);
             dialedNumber = ""; display.innerHTML = "&nbsp;"; status.innerText = "Wähle eine Nummer"; hangupBtn.classList.add('hidden');
             statusLight.className = `w-12 h-12 bg-blue-600 rounded-full mx-auto mb-1 flex items-center justify-center opacity-30 transition-all duration-300`;
             if (playPromise) {
