@@ -142,7 +142,8 @@
     <div id="lock-overlay" class="hidden absolute inset-0 bg-black z-[100] flex flex-col items-center justify-center text-center px-4">
         <svg class="w-16 h-16 text-red-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
         <h1 class="text-3xl font-bold text-red-600 tracking-widest mb-2">SYSTEM HALT</h1>
-        <p class="text-gray-400">Vollbildmodus erforderlich. Bitte drücke die Taste <kbd class="bg-gray-800 px-2 py-1 rounded text-white font-bold">0</kbd> um fortzufahren.</p>
+        <!-- Hinweis auf Buchstabe f angepasst -->
+        <p class="text-gray-400">Vollbildmodus erforderlich. Bitte drücke die Taste <kbd class="bg-gray-800 px-2 py-1 rounded text-white font-bold">f</kbd> um fortzufahren.</p>
     </div>
 
     <!-- ================= LOGIN SCREEN ================= -->
@@ -330,7 +331,8 @@
             const loginVisible = !document.getElementById('login-screen').classList.contains('hidden');
             const phoneVisible = !document.getElementById('messenger-app').classList.contains('hidden');
 
-            if (e.key === '0' && loginVisible === false && phoneVisible === false) {
+            // Umschalten auf Buchstabe 'f' für Fullscreen
+            if (e.key.toLowerCase() === 'f' && loginVisible === false && phoneVisible === false) {
                 isLocked = !isLocked;
                 if (isLocked) { document.documentElement.requestFullscreen().catch(() => {}); lockOverlay.classList.add('hidden'); }
                 else { if (document.fullscreenElement) document.exitFullscreen(); lockOverlay.classList.add('hidden'); }
