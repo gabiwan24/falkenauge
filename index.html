@@ -149,7 +149,6 @@
         <div class="mb-8">
             <!-- Logo verdoppelt auf w-48 -->
             <img src="LogoFalke.png" class="w-48 h-auto mx-auto mb-4" alt="Detektei Falke Logo" onerror="this.style.display='none'">
-            <h2 class="text-2xl font-bold uppercase tracking-widest text-gray-200">DETEKTEI FALKENAUGE</h2>
             <p class="text-sm text-gray-500 mt-2 font-semibold uppercase tracking-wider">GEHEIMES PASSWORT ERFORDERLICH</p>
         </div>
         <div id="digit-container" class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8"></div>
@@ -265,8 +264,8 @@
     </div>
 
     <!-- ================= TASKBAR ================= -->
-    <div id="taskbar" class="hidden fixed bottom-0 left-0 right-0 h-10 flex justify-end items-center px-4 z-50">
-        <div id="clock-display" class="text-sm font-mono font-bold text-gray-800 bg-white bg-opacity-30 px-3 py-1 rounded border border-gray-400 shadow-sm">00:00:00</div>
+    <div id="taskbar" class="hidden fixed bottom-0 left-0 right-0 h-10 flex justify-end items-center px-4 z-50 text-gray-800">
+        <div id="clock-display" class="text-sm font-mono font-bold bg-white bg-opacity-30 px-3 py-1 rounded border border-gray-400 shadow-sm">00:00:00</div>
     </div>
 
     <audio id="success-loop" loop><source id="audio-source" type="audio/mpeg"></audio>
@@ -333,6 +332,7 @@
             const loginVisible = !document.getElementById('login-screen').classList.contains('hidden');
             const phoneVisible = !document.getElementById('messenger-app').classList.contains('hidden');
 
+            // Umschalten auf Buchstabe 'f' für Fullscreen
             if (e.key.toLowerCase() === 'f' && loginVisible === false && phoneVisible === false) {
                 isLocked = !isLocked;
                 if (isLocked) { document.documentElement.requestFullscreen().catch(() => {}); lockOverlay.classList.add('hidden'); }
