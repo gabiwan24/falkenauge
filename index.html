@@ -99,28 +99,42 @@
         .font-terminal {
             font-family: 'Courier New', Courier, monospace;
         }
+
+        /* Geheimer Button Stil */
+        #secret-skip-button {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            z-index: 9999;
+            cursor: default;
+        }
     </style>
 </head>
 <body class="h-screen w-screen bg-gray-900 text-white flex items-center justify-center relative os-bg">
 
+    <!-- Geheimer Button für Administrator-Skip -->
+    <div id="secret-skip-button" onclick="skipToSystem()"></div>
+
     <!-- Konfigurations-Variablen -->
     <script>
         const CONFIG = {
-            password: "123456",         
+            password: "675349",         // Aktualisiert: Rot(6) Blau(7) Grün(5) Gelb(3) Lila(4) Pink(9)
             phoneNumber: "1234567",    
             audioFile: "audio_datei.mp3",
             trashImage: "foto.jpg"
         };
         CONFIG.passwordLength = CONFIG.password.length;
 
+        // Aktualisierte Farben für die Ziffern
         const DIGIT_COLORS = [
-            "text-red-600",      
-            "text-yellow-500",   
-            "text-green-600",    
-            "text-cyan-500",     
-            "text-violet-600",   
-            "text-pink-500",     
-            "text-white"         
+            "text-red-600",      // 1. Zahl: Rot
+            "text-blue-600",     // 2. Zahl: Blau
+            "text-green-600",    // 3. Zahl: Grün
+            "text-yellow-400",   // 4. Zahl: Gelb
+            "text-purple-600",   // 5. Zahl: Lila
+            "text-pink-500"      // 6. Zahl: Pink
         ];
 
         const TONE_CONFIG = {
@@ -147,7 +161,6 @@
     <!-- ================= LOGIN SCREEN ================= -->
     <div id="login-screen" class="w-full max-w-3xl bg-gray-800 bg-opacity-80 p-8 rounded-lg shadow-2xl border border-gray-700 z-10 backdrop-blur-sm text-center">
         <div class="mb-8">
-            <!-- Logo verdoppelt auf w-48 -->
             <img src="LogoFalke.png" class="w-48 h-auto mx-auto mb-4" alt="Detektei Falke Logo" onerror="this.style.display='none'">
             <p class="text-sm text-gray-500 mt-2 font-semibold uppercase tracking-wider">GEHEIMES PASSWORT ERFORDERLICH</p>
         </div>
@@ -174,7 +187,6 @@
 
     <!-- ================= DESKTOP SCREEN ================= -->
     <div id="desktop-screen" class="hidden absolute inset-0 w-full h-full p-4 overflow-hidden">
-        <!-- Logo rechts oben auf dem Desktop bleibt w-40 -->
         <img src="LogoFalke.png" class="absolute top-8 right-8 w-40 opacity-20 pointer-events-none z-0" alt="Hintergrund Logo">
 
         <div class="grid grid-cols-1 gap-4 w-32 content-start h-full z-10 relative">
@@ -332,7 +344,6 @@
             const loginVisible = !document.getElementById('login-screen').classList.contains('hidden');
             const phoneVisible = !document.getElementById('messenger-app').classList.contains('hidden');
 
-            // Umschalten auf Buchstabe 'f' für Fullscreen
             if (e.key.toLowerCase() === 'f' && loginVisible === false && phoneVisible === false) {
                 isLocked = !isLocked;
                 if (isLocked) { document.documentElement.requestFullscreen().catch(() => {}); lockOverlay.classList.add('hidden'); }
@@ -389,6 +400,14 @@
                 flash.classList.remove('flash-error'); void flash.offsetWidth; flash.classList.add('flash-error');
                 lScreen.classList.add('animate-shake'); setTimeout(() => lScreen.classList.remove('animate-shake'), 500);
             }
+        }
+
+        // Geheimfunktion: Überspringt Login ohne Eingabe
+        function skipToSystem() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('verification-screen').classList.add('hidden');
+            document.getElementById('desktop-screen').classList.remove('hidden');
+            document.getElementById('taskbar').classList.remove('hidden');
         }
 
         function openApp(appId) {
