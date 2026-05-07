@@ -89,7 +89,7 @@
             z-index: 20;
         }
 
-        /* Taskbar Styling */
+        /* Taskbar Styling (Windows-Grau) */
         #taskbar {
             background-color: #d4d0c8; 
             border-top: 2px solid #ffffff;
@@ -120,21 +120,20 @@
     <!-- Konfigurations-Variablen -->
     <script>
         const CONFIG = {
-            password: "675349",         // Aktualisiert: Rot(6) Blau(7) Grün(5) Gelb(3) Lila(4) Pink(9)
-            phoneNumber: "0896767007",    
+            password: "675349",         // Rot(6) Blau(7) Grün(5) Gelb(3) Lila(4) Pink(9)
+            phoneNumber: "0896767007", 
             audioFile: "audio_datei.mp3",
             trashImage: "foto.jpg"
         };
         CONFIG.passwordLength = CONFIG.password.length;
 
-        // Aktualisierte Farben für die Ziffern
         const DIGIT_COLORS = [
-            "text-red-600",      // 1. Zahl: Rot
-            "text-blue-600",     // 2. Zahl: Blau
-            "text-green-600",    // 3. Zahl: Grün
-            "text-yellow-400",   // 4. Zahl: Gelb
-            "text-purple-600",   // 5. Zahl: Lila
-            "text-pink-500"      // 6. Zahl: Pink
+            "text-red-600",      
+            "text-blue-600",     
+            "text-green-600",    
+            "text-yellow-400",   
+            "text-purple-600",   
+            "text-pink-500"      
         ];
 
         const TONE_CONFIG = {
@@ -161,7 +160,7 @@
     <!-- ================= LOGIN SCREEN ================= -->
     <div id="login-screen" class="w-full max-w-3xl bg-gray-800 bg-opacity-80 p-8 rounded-lg shadow-2xl border border-gray-700 z-10 backdrop-blur-sm text-center">
         <div class="mb-8">
-            <img src="LogoFalke.png" class="w-48 h-auto mx-auto mb-4" alt="Detektei Falke Logo" onerror="this.style.display='none'">
+            <img src="LogoFalke.png" class="w-48 h-auto mx-auto mb-4" alt="Logo" onerror="this.style.display='none'">
             <p class="text-sm text-gray-500 mt-2 font-semibold uppercase tracking-wider">GEHEIMES PASSWORT ERFORDERLICH</p>
         </div>
         <div id="digit-container" class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8"></div>
@@ -187,7 +186,7 @@
 
     <!-- ================= DESKTOP SCREEN ================= -->
     <div id="desktop-screen" class="hidden absolute inset-0 w-full h-full p-4 overflow-hidden">
-        <img src="LogoFalke.png" class="absolute top-8 right-8 w-40 opacity-20 pointer-events-none z-0" alt="Hintergrund Logo">
+        <img src="LogoFalke.png" class="absolute top-8 right-8 w-40 opacity-20 pointer-events-none z-0" alt="Wasserzeichen">
 
         <div class="grid grid-cols-1 gap-4 w-32 content-start h-full z-10 relative">
             <div class="desktop-icon flex flex-col items-center justify-center p-2 text-center group">
@@ -207,23 +206,24 @@
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
             <div class="desktop-icon icon-highlight flex flex-col items-center justify-center p-4 text-center group pointer-events-auto" onclick="openApp('text-editor')">
                 <svg class="w-20 h-20 text-blue-100 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <span class="text-sm font-bold text-white drop-shadow-lg bg-gray-900 bg-opacity-70 px-3 py-1 rounded border border-gray-600">Fallakte_304.txt</span>
+                <span class="text-sm font-bold text-white drop-shadow-lg bg-gray-900 bg-opacity-70 px-3 py-1 rounded border border-gray-600">Willkommen.txt</span>
             </div>
         </div>
 
-        <!-- APP: Text Editor -->
-        <div id="text-editor" class="app-window hidden w-[600px] max-w-[90vw] h-[400px] bg-gray-800 border border-gray-600 rounded-lg shadow-2xl flex flex-col overflow-hidden">
+        <!-- APP: Text Editor (Inhalt aktualisiert) -->
+        <div id="text-editor" class="app-window hidden w-[600px] max-w-[90vw] h-auto min-h-[300px] bg-gray-800 border border-gray-600 rounded-lg shadow-2xl flex flex-col overflow-hidden">
             <div class="window-header bg-gray-700 px-4 py-2 flex justify-between items-center border-b border-gray-600">
                 <div class="flex items-center space-x-2">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span class="text-sm font-semibold text-gray-200">Editor - Fallakte_304.txt</span>
+                    <span class="text-sm font-semibold text-gray-200">Editor - Willkommen.txt</span>
                 </div>
                 <button onclick="closeApp('text-editor')" class="text-gray-400 hover:text-white hover:bg-red-500 p-1 rounded transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
-            <div class="flex-1 p-6 overflow-y-auto bg-gray-900 text-green-400 font-terminal text-sm leading-relaxed">
-                <p class="mb-4 text-gray-500">Log: 14. Oktober - Verschlüsselt</p>
-                <div class="bg-gray-800 p-4 border-l-4 border-green-500 mb-8 italic text-white text-lg font-sans">"Die Lösung liegt in den Himmelsrichtungen verborgen. Fang dort an, wo die Sonne aufgeht, und folge dem Lauf der Zeit."</div>
-                <p>--- ENDE DER DATEI ---</p>
+            <div class="flex-1 p-8 overflow-y-auto bg-gray-900 text-blue-400 font-terminal text-sm leading-relaxed">
+                <div class="bg-gray-800 p-6 border-l-4 border-blue-500 mb-8 italic text-white text-xl font-sans leading-snug shadow-inner">
+                    Willkommen in meinem Computer! Schaut in eure Unterlagen und ruft die Notfall-Nummer an!
+                </div>
+                <p class="text-gray-600 text-xs mt-4">--- SYSTEMNACHRICHT ENDE ---</p>
             </div>
         </div>
 
@@ -393,6 +393,7 @@
                         vScreen.classList.add('hidden'); 
                         document.getElementById('desktop-screen').classList.remove('hidden'); 
                         document.getElementById('taskbar').classList.remove('hidden');
+                        openApp('text-editor'); // Dokument automatisch öffnen
                     }, 3000);
                 }, 5000);
             } else {
@@ -402,12 +403,13 @@
             }
         }
 
-        // Geheimfunktion: Überspringt Login ohne Eingabe
+        // Geheimfunktion
         function skipToSystem() {
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('verification-screen').classList.add('hidden');
             document.getElementById('desktop-screen').classList.remove('hidden');
             document.getElementById('taskbar').classList.remove('hidden');
+            openApp('text-editor'); // Dokument automatisch öffnen
         }
 
         function openApp(appId) {
